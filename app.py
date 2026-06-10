@@ -32,7 +32,6 @@ def obtener_votos():
         
         for candidato in lista_candidatos:
             nombre = candidato.get("nombreCandidato", "")
-            # CAMBIO CLAVE: Extraemos 'totalVotosValidos' en lugar del porcentaje
             cantidad = formatear_votos(candidato.get("totalVotosValidos", 0))
             
             if "SANCHEZ" in nombre:
@@ -64,7 +63,6 @@ def obtener_votos():
         
         for candidato in lista_candidatos:
             nombre = candidato.get("nombreCandidato", "")
-            # CAMBIO CLAVE: Extraemos 'totalVotosValidos' en el Plan B
             cantidad = formatear_votos(candidato.get("totalVotosValidos", 0))
             
             if "SANCHEZ" in nombre:
@@ -77,10 +75,11 @@ def obtener_votos():
             "candidato2": "Fujimori", "votos2": votos_fujimori
         })
     except Exception as e:
-        # Valores de respaldo reales basados en tu captura por si ambos servidores fallan momentáneamente
+        # CAMBIO CLAVE: Si todo falla a nivel de red, enviamos una etiqueta clara de error.
+        # El ESP32 recibirá esto y lo pintará directamente en la pantalla, alertándote de inmediato.
         return jsonify({
-            "candidato1": "Sanchez", "votos1": "9,017,296",
-            "candidato2": "Fujimori", "votos2": "9,008,103"
+            "candidato1": "Error", "votos1": "SinConexion",
+            "candidato2": "Error", "votos2": "ONPE_Down"
         })
 
 if __name__ == '__main__':
