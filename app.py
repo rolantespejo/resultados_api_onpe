@@ -27,26 +27,22 @@ def obtener_votos():
         json_onpe = respuesta.json()
         lista_candidatos = json_onpe.get("data", [])
         
-        num_sanchez = 0
-        num_fujimori = 0
+        votos_sanchez = "0"
+        votos_fujimori = "0"
         
         for candidato in lista_candidatos:
             nombre = candidato.get("nombreCandidato", "")
-            votos_puros = int(candidato.get("totalVotosValidos", 0))
+            cantidad = formatear_votos(candidato.get("totalVotosValidos", 0))
             
             if "SANCHEZ" in nombre:
-                num_sanchez = votos_puros
+                votos_sanchez = cantidad
             elif "FUJIMORI" in nombre:
-                num_fujimori = votos_puros
+                votos_fujimori = cantidad
                 
-        if num_sanchez != 0 or num_fujimori != 0:
-            # Calculamos la diferencia absoluta (siempre positiva)
-            dif_numerica = abs(num_sanchez - num_fujimori)
-            
+        if votos_sanchez != "0" or votos_fujimori != "0":
             return jsonify({
-                "candidato1": "Sanchez", "votos1": formatear_votos(num_sanchez),
-                "candidato2": "Fujimori", "votos2": formatear_votos(num_fujimori),
-                "diferencia": formatear_votos(dif_numerica) # Nueva llave calculada
+                "candidato1": "Sanchez", "votos1": votos_sanchez,
+                "candidato2": "Fujimori", "votos2": votos_fujimori
             })
             
     except Exception:
@@ -62,29 +58,28 @@ def obtener_votos():
         json_onpe = json.loads(datos_espejo['contents'])
         lista_candidatos = json_onpe.get("data", [])
         
-        num_sanchez = 0
-        num_fujimori = 0
+        votos_sanchez = "0"
+        votos_fujimori = "0"
         
         for candidato in lista_candidatos:
             nombre = candidato.get("nombreCandidato", "")
-            votos_puros = int(candidato.get("totalVotosValidos", 0))
+            cantidad = formatear_votos(candidato.get("totalVotosValidos", 0))
             
             if "SANCHEZ" in nombre:
-                num_sanchez = votos_puros
+                votos_sanchez = cantidad
             elif "FUJIMORI" in nombre:
-                num_fujimori = votos_puros
+                votos_fujimori = cantidad
                 
-        dif_numerica = abs(num_sanchez - num_fujimori)
         return jsonify({
-            "candidato1": "Sanchez", "votos1": formatear_votos(num_sanchez),
-            "candidato2": "Fujimori", "votos2": formatear_votos(num_fujimori),
-            "diferencia": formatear_votos(dif_numerica) # Nueva llave calculada
+            "candidato1": "Sanchez", "votos1": votos_sanchez,
+            "candidato2": "Fujimori", "votos2": votos_fujimori
         })
     except Exception as e:
+        # CAMBIO CLAVE: Si todo falla a nivel de red, enviamos una etiqueta clara de error.
+        # El ESP32 recibirá esto y lo pintará directamente en la pantalla, alertándote de inmediato.
         return jsonify({
             "candidato1": "Error", "votos1": "SinConexion",
-            "candidato2": "Error", "votos2": "ONPE_Down",
-            "diferencia": "0"
+            "candidato2": "Error", "votos2": "ONPE_Down"
         })
 
 if __name__ == '__main__':
