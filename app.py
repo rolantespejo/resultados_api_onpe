@@ -67,10 +67,12 @@ def obtener_votos():
             pass
 
     # --- INTENTO 3: Plan C (Proxy Alternativo ThingProxy) ---
+    # --- INTENTO 3 (OPTIMIZADO): Plan C con puente alternativo ---
     if not exito:
         try:
-            url_espejo2 = "https://thingproxy.freeboard.io/fetch/" + url_onpe
-            respuesta = requests.get(url_espejo2, headers=headers, timeout=6)
+            # Forzamos una cabecera de codificación distinta para romper firmas del firewall
+            url_espejo3 = "https://api.codetabs.com/v1/proxy/?quest=" + url_onpe
+            respuesta = requests.get(url_espejo3, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)'}, timeout=6)
             if respuesta.status_code == 200:
                 lista = respuesta.json().get("data", [])
                 for cand in lista:
