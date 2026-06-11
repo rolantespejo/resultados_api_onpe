@@ -6,8 +6,8 @@ app = Flask(__name__)
 
 # --- Base de datos en memoria caché local (Persistencia temporal en Render) ---
 cache_votos = {
-    "num_sanchez": 9017296,   # Respaldos base iniciales tomados de tus capturas exitosas
-    "num_fujimori": 9008103,
+    "num_sanchez": 9032092,   # Respaldos base iniciales tomados de tus capturas exitosas
+    "num_fujimori": 9032653,
     "ultima_actualizacion_exitosa": 0
 }
 
